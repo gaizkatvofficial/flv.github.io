@@ -2,15 +2,22 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="email=no">
+    <title>DPlayer FLV</title>
+    
+    <style type='text/css'>body{margin:0 auto;}</style>
+    <link rel="stylesheet" href="https://unpkg.com/dplayer@1.25.0/dist/DPlayer.min.css">
+</head>
+
+<body>
+    <div id="dplayer"></div>
     <script src='https://unpkg.com/dplayer@1.27.1/dist/DPlayer.min.js'></script>
     <script src='https://unpkg.com/flv.js@1.6.2/dist/flv.min.js'></script>
-    <style type='text/css'>body{margin:0 auto;}</style>
-    <title>DPlayer FLV</title>
     <script>
         function getParameterByName(name, url) {
             if (!url) url = window.location.href;
@@ -22,22 +29,18 @@
             return decodeURIComponent(results[2].replace(/\+/g, " "));
         }
 
-        // Gunakan fungsi getParameterByName untuk mendapatkan nilai parameter 'video_url' dari URL
         var videoUrl = getParameterByName('video_url');
-    </script>
-</head>
-
-<body>
-    <div id="dplayer"></div>
-    <script>
+        var posterUrl = getParameterByName('poster_url');
+        
         const dp = new DPlayer({
             container: document.getElementById('dplayer'),
             live: true,
-            autoplay:true,
-            loop:true,
+            autoplay: true,
+            loop: true,
             video: {
-                url: videoUrl, // Menggunakan nilai videoUrl yang didapat dari parameter URL
+                url: videoUrl,
                 type: 'flv',
+                pic: posterUrl // 'pic' is an alias of 'poster', both work to set the poster image URL
             },
             pluginOptions: {
                 flv: {
@@ -50,6 +53,21 @@
                     },
                 },
             },
+            preload: 'auto', // 'auto' | 'metadata' | 'none'
+            volume: 0.7, // Default volume, ranges from 0 to 1
+            mutex: true, // Set to true to prevent multiple players from playing simultaneously
+            screenshot: true, // Enable screenshot feature, default is false
+            hotkey: true, // Enable hotkey, default is true
+           // logo: 'logo.png', // Logo URL, default is ''
+            theme: '#FADFA3', // Theme color, default is '#b7daff'
+            lang: 'en', // Language setting, default is navigator.language || navigator.userLanguage
+            playbackRate: [0.5, 0.75, 1, 1.25, 1.5, 2], // Custom playback rate, default is [0.5, 0.75, 1, 1.5, 2]
+            contextmenu: [
+                {
+                    text: 'Custom Menu',
+                    link: 'https://github.com/MoePlayer/DPlayer'
+                }
+            ] // Custom context menu items
         });
         console.log(dp.plugins.flv); // flv instance
     </script>
